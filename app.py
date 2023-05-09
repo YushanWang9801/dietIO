@@ -55,7 +55,7 @@ def resize_image(image, size=512):
 #     return preds
 
 def json_handle():
-    df2 = pd.read_excel('230303-17_MQ_CGM.xlsx', skiprows=1,
+    df2 = pd.read_excel('./230303-17_MQ_CGM.xlsx', skiprows=1,
                         sheet_name='Scanned_inputs')  # 读取scanned input sheet
     df2 = df2[["Device Timestamp", "Scan Glucose mg/dL", "Notes(Calories)", "Notes(Ingredients)"]]
     df2.columns = ["time", "glu", "calories", "ingredients"]
