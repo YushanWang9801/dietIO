@@ -2,7 +2,6 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import app_engine
-import cv2
 import pandas as pd
 import time
 
@@ -22,11 +21,6 @@ from matplotlib.dates import DateFormatter
 def resize_image(image, size=512):
     resized_image = image.resize((size, size))
     return np.array(resized_image)
-
-def canny_selfie(image):
-    image_array = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-    edges = cv2.Canny(image_array, 100, 200)
-    return edges
 
 def mask_image(image):
     model = CLIPDensePredT(version='ViT-B/16', reduce_dim=64)
@@ -197,7 +191,7 @@ def health_monitor(personal_info, selfie_image):
             progress_bar.progress(5+i*5)
             time.sleep(0.1)
 
-        edges = canny_selfie(selfie_image)
+        edges = Image.open("./canny.png")
         st.image(edges, use_column_width=True)
         
         st.write("\n Second, we will be extracting mask to locate your central face area: ")
