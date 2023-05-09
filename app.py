@@ -6,7 +6,10 @@ import pandas as pd
 import time
 
 import torch
-from clipseg.models.clipseg import CLIPDensePredT
+import sys
+sys.path.append("./clipseg/models")
+from clipseg import CLIPDensePredT
+# from clipseg.models.clipseg import CLIPDensePredT
 from PIL import Image
 from torchvision import transforms
 
