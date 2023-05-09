@@ -5,13 +5,13 @@ import app_engine
 import pandas as pd
 import time
 
-import torch
-import sys
-sys.path.append("./clipseg/models")
-from clipseg import CLIPDensePredT
+# import torch
+# import sys
+# sys.path.append("./clipseg/models")
+# from clipseg import CLIPDensePredT
 # from clipseg.models.clipseg import CLIPDensePredT
 from PIL import Image
-from torchvision import transforms
+# from torchvision import transforms
 
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -25,34 +25,34 @@ def resize_image(image, size=512):
     resized_image = image.resize((size, size))
     return np.array(resized_image)
 
-def mask_image(image):
-    model = CLIPDensePredT(version='ViT-B/16', reduce_dim=64)
-    model.eval()
-    model.load_state_dict(torch.load('./weights/rd64-uni.pth', 
-                                     map_location=torch.device('cuda')), 
-                                     strict=False)
-    input_image = image
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        transforms.Resize((512, 512)),
-    ])
-    img = transform(input_image).unsqueeze(0)
+# def mask_image(image):
+#     model = CLIPDensePredT(version='ViT-B/16', reduce_dim=64)
+#     model.eval()
+#     model.load_state_dict(torch.load('./weights/rd64-uni.pth', 
+#                                      map_location=torch.device('cuda')), 
+#                                      strict=False)
+#     input_image = image
+#     transform = transforms.Compose([
+#         transforms.ToTensor(),
+#         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+#         transforms.Resize((512, 512)),
+#     ])
+#     img = transform(input_image).unsqueeze(0)
     
-    prompts = ['area outside of face']
-    with torch.no_grad():
-        preds = model(img.repeat(len(prompts),1,1,1), prompts)[0]
+#     prompts = ['area outside of face']
+#     with torch.no_grad():
+#         preds = model(img.repeat(len(prompts),1,1,1), prompts)[0]
     
-    preds = torch.sigmoid(preds[0][0])
-    array = preds.numpy()
+#     preds = torch.sigmoid(preds[0][0])
+#     array = preds.numpy()
 
-    # Scale the values in the array to the range 0-255
-    array = (array * 255).astype(np.uint8)
-    array = np.squeeze(array)
+#     # Scale the values in the array to the range 0-255
+#     array = (array * 255).astype(np.uint8)
+#     array = np.squeeze(array)
 
-    # Scale the values in the array to the range 0-255
-    preds = Image.fromarray(array)
-    return preds
+#     # Scale the values in the array to the range 0-255
+#     preds = Image.fromarray(array)
+#     return preds
 
 def json_handle():
     df2 = pd.read_excel('230303-17_MQ_CGM.xlsx', skiprows=1,
@@ -193,14 +193,16 @@ def health_monitor(personal_info, selfie_image):
             # Update the progress bar with each iteration
             progress_bar.progress(5+i*5)
             time.sleep(0.1)
-
+    
         edges = Image.open("./canny.png")
         st.image(edges, use_column_width=True)
         
         st.write("\n Second, we will be extracting mask to locate your central face area: ")
         with st.spinner('Running Mask Extraction function...'):
             progress_bar = st.progress(0)
-            mask = mask_image(selfie_image)
+            # mask = mask_image(selfie_image)
+            mask = Image.open("./mask.png")
+            time.sleep(2.0)
             progress_bar.progress(100)
         st.image(mask, use_column_width=True)
     
