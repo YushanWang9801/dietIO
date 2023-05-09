@@ -7,7 +7,6 @@ import pandas as pd
 import time
 
 import torch
-import cv2 
 from clipseg.models.clipseg import CLIPDensePredT
 from PIL import Image
 from torchvision import transforms
